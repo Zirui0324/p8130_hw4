@@ -8,6 +8,7 @@ date: "2022-11-12"
 library(tidyverse)
 library(BSDA)
 library(readxl)
+library(readr)
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -55,14 +56,79 @@ y_0 = 0.181*7.22 + 0.164
   The predicted glia-neuron ratio for humans is **`r y_0`**.
 
 * c)
+  
 
 * d)
+
 
 * e)
 
 
+## Problem 3
+```{r}
+heart_data = 
+  read.csv("./HeartDisease.csv") %>% 
+  mutate(
+    gender = as.factor(gender),
+    gender = recode(gender, "0" = "otherwise", "1" = "male")
+         )
+  
+```
+
+* a)
+  The main predictor of this dataset is **total cost**, The main outcome is **number of emergency room visits**.
+  Other important covariates: **age, gender, complications, duration**.
+  Here are some descriptions of the important variables:
+  
+```{r}
+summary(heart_data$totalcost)
+summary(heart_data$ERvisits)
+summary(heart_data$age)
+summary(heart_data$complications)
+summary(heart_data$duration)
+
+gender_sum = 
+  heart_data %>% 
+  group_by(gender) %>% 
+  summarise(count = n())
+
+  barplot(height = gender_sum$count,
+          names = gender_sum$gender)
+```
 
 
+* b)
+  Investigate the shape of the distribution for variable totalcost and try different transformations, if needed.
+  
+```{r}
+hist(heart_data$totalcost, xlab = "Total Cost", breaks = 100)
+hist((heart_data$totalcost)^2, xlab = "ln(Total Cost)", breaks = 100)
+hist((heart_data$totalcost)^(-1), xlab = "ln(Total Cost)", breaks = 100)
+hist(log(heart_data$totalcost), xlab = "ln(Total Cost)", breaks = 100)
+```
+
+It seems that the plot best fits normality after ln transformation.
+
+```{r}
+heart_data2 = 
+  heart_data %>% 
+  filter(totalcost > 0) 
+
+shapiro.test(log(heart_data2$totalcost))
+```
+  
+The Shapiro Test shows that total cost data dosen't follow normal distribution after ln transformation.
+
+* c)
+
+
+* d)
+
+
+* e)
+
+
+* f)
 
 
 
