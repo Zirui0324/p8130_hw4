@@ -1,0 +1,68 @@
+---
+title: "HW4"
+output: html_document
+date: "2022-11-12"
+---
+
+```{r message=FALSE}
+library(tidyverse)
+library(BSDA)
+library(readxl)
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE)
+```
+
+## Problem1
+
+```{r}
+blood_data = c(125, 123, 117, 123, 115, 112, 128, 118, 124, 111, 116, 109, 125, 120, 113, 123, 112, 118, 121, 118, 122, 115, 105, 118, 131)
+blood_test_data = blood_data - 120
+SIGN.test(blood_test_data, alternative = "less", conf.level = 0.95)
+```
+
+* a)
+  According to the sign-test above, we can see that the test statistic is **what?** with p-value **0.2706**. Thus we fail to reject the null hypothesis under a 0.05 significant level and claim that the median blood sugar readings was 120 in the population from which the 25 patients were selected.
+ 
+```{r}
+wilcox.test(blood_test_data, alternative = "less", conf.level = 0.95)
+``` 
+* b)
+  According to Wilcoxon signed-rank test, we can see that the test statistic is **what?** with p-value **0.1447**. Thus we fail to reject the null hypothesis under a 0.05 significant level and claim that the median blood sugar readings was 120 in the population from which the 25 patients were selected.
+  
+  
+## Problem 2
+```{r}
+brain_data = 
+  read_xlsx("./Brain.xlsx")[-c(1),] %>% 
+  janitor::clean_names()
+
+brain_fit = 
+  lm(glia_neuron_ratio ~ ln_brain_mass, data = brain_data) 
+
+brain_fit %>% 
+  broom::tidy()
+```
+* a) 
+  The linear model for the nonhuman data using ln (brain mass) as the predictor is : **y = 0.181x + 0.164**.
+
+```{r}
+y_0 = 0.181*7.22 + 0.164
+```
+
+* b)
+  The predicted glia-neuron ratio for humans is **`r y_0`**.
+
+* c)
+
+* d)
+
+* e)
+
+
+
+
+
+
+
