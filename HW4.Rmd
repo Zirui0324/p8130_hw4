@@ -107,25 +107,61 @@ hist((heart_data$totalcost)^(-1), xlab = "ln(Total Cost)", breaks = 100)
 hist(log(heart_data$totalcost), xlab = "ln(Total Cost)", breaks = 100)
 ```
 
-It seems that the plot best fits normality after ln transformation.
+It seems that the plot best fits normality after ln-transformation.
 
 ```{r}
-heart_data2 = 
+heart_data = 
   heart_data %>% 
-  filter(totalcost > 0) 
+  filter(totalcost > 0) %>% 
+  mutate(ln_cost = log(totalcost))
 
-shapiro.test(log(heart_data2$totalcost))
+shapiro.test(heart_data$ln_cost)
 ```
   
-The Shapiro Test shows that total cost data dosen't follow normal distribution after ln transformation.
+The Shapiro Test shows that total cost data doesn't follow normal distribution after ln-transformation.
 
 * c)
 
+```{r }
+heart_data = 
+  heart_data %>% 
+  mutate(
+    comp_bin = 
+      case_when(
+        complications == 0 ~ "0",
+        TRUE ~ "1"
+      ))
+```
 
 * d)
+```{r}
+plot(heart_data$ERvisits, heart_data$ln_cost)
 
+heart_data %>% 
+  ggplot()+
+  geom_point(aes(x = ERvisits, y = ln_cost))+
+  theme_bw()+
+  labs(x = "Number of Emergency Room Visits",
+       y = "ln(Total Cost)")
+
+heart_fit = 
+  lm(ln_cost ~ ERvisits, data = heart_data)
+
+summary(heart_fit)
+
+t_cri = qt(p=.05/2, df=783, lower.tail=FALSE)
+t_cri
+```
+The slope is 0.22672, at a 5% significance level, t > t783,0.975, we reject the null and conclude that there is a significant linear association between the number of Emergency room visits and ln(Total cost).
 
 * e)
+```{r}
+fit_1 = 
+  lm(ln_cost ~ ERvisits + comp_bin, data = heart_data)
+fit_1|>summary()
+fit_1|>anova()
+```
+
 
 
 * f)
