@@ -211,7 +211,7 @@ fit_more|>summary()
 fit_more|>anova()
 ```
 
-The fitted model is **ln(totalcost) = 6.0449619  + 0.1757486ERvisits + 1.4921110comp_bin - 0.0221376age + 0.0055406duration**. As the covariate **gender** didn't make any significant difference to the model under a 5% confidence level, it should not be included along with other variables.
+The fitted model is **ln(totalcost) = 6.0449619  + 0.1757486ERvisits + 1.4921110comp_bin + 0.0055406duration**. As the covariates **age and gender** didn't make any significant difference to the model under a 5% confidence level, they should not be included along with other variables.
 
 2)
 
